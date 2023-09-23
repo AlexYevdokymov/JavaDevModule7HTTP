@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 public class HttpStatusChecker {
     private static String catUrl = "https://http.cat/";
-    static String getStatusImage(int code) throws IOException, InterruptedException {
+    static String getStatusImage(int code) throws IOException, InterruptedException, PageNotFoundException {
         String url = catUrl + code;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -16,7 +16,7 @@ public class HttpStatusChecker {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 404) return "Not found";
+        if (response.statusCode() == 404) throw new PageNotFoundException();
         else return url;
     }
 }
